@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>⚠️ Phishing Awareness</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --red: #ff3b30; --orange: #ff9500; --green: #34c759; --bg: #0a0a0a; --card: #141414; --border: #2a2a2a; --text: #f0f0f0; --muted: #888; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; padding: 24px 16px 60px; }
+    .banner { background: linear-gradient(135deg, #ff3b30, #ff6b35); border-radius: 16px; padding: 28px 24px; text-align: center; margin-bottom: 28px; animation: slideDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; }
+    .banner::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+    @keyframes slideDown { from{transform:translateY(-30px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+    .banner .emoji { font-size: 52px; display: block; margin-bottom: 10px; }
+    .banner h1 { font-family: 'Syne', sans-serif; font-size: clamp(22px, 6vw, 32px); font-weight: 800; color: #fff; line-height: 1.2; }
+    .banner p { color: rgba(255,255,255,0.9); margin-top: 8px; font-size: 15px; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; animation: fadeUp 0.5s ease both; }
+    @keyframes fadeUp { from{transform:translateY(16px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+    .data-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+    .data-row:last-child { border-bottom: none; }
+    .data-label { color: var(--muted); font-size: 13px; min-width: 100px; }
+    .data-value { color: var(--red); font-size: 13px; font-weight: 600; text-align: right; word-break: break-all; max-width: 60%; }
+    .data-value.safe { color: var(--orange); }
+    .tip { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .tip:last-child { border-bottom: none; }
+    .tip-icon { width: 36px; height: 36px; min-width: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: rgba(52, 199, 89, 0.15); }
+    .tip-text h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .tip-text p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .how-step { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .how-step:last-child { border-bottom: none; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: linear-gradient(135deg, #ff3b30, #ff6b35); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
+    .step-text { font-size: 14px; line-height: 1.5; color: var(--text); padding-top: 4px; }
+    .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .impact-item { background: rgba(255,59,48,0.08); border: 1px solid rgba(255,59,48,0.2); border-radius: 12px; padding: 14px 12px; text-align: center; }
+    .impact-item .icon { font-size: 24px; margin-bottom: 6px; }
+    .impact-item p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .btn-dashboard { display: block; width: 100%; padding: 16px; background: linear-gradient(135deg, #0095f6, #1877f2); color: #fff; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; font-family: 'Syne', sans-serif; cursor: pointer; text-decoration: none; text-align: center; margin-top: 8px; transition: opacity 0.2s; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(255,59,48,0.15); color: var(--red); border: 1px solid rgba(255,59,48,0.3); margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+<div class="banner">
+  <span class="emoji">🎣</span>
+  <h1>You Just Got Phished!</h1>
+  <p>This was a simulated phishing attack for educational purposes.</p>
+</div>
+<div class="badge">🔴 LIVE DEMONSTRATION — YOUR DATA WAS CAPTURED</div>
+<p class="section-title">What We Captured</p>
+<div class="card">
+  <div class="data-row"><span class="data-label">Username</span><span class="data-value" id="cap-username">—</span></div>
+  <div class="data-row"><span class="data-label">Password</span><span class="data-value" id="cap-password">—</span></div>
+  <div class="data-row"><span class="data-label">Device</span><span class="data-value safe" id="cap-platform">—</span></div>
+  <div class="data-row"><span class="data-label">Screen</span><span class="data-value safe" id="cap-screen">—</span></div>
+  <div class="data-row"><span class="data-label">Language</span><span class="data-value safe" id="cap-language">—</span></div>
+  <div class="data-row"><span class="data-label">Browser</span><span class="data-value safe" id="cap-browser">—</span></div>
+  <div class="data-row"><span class="data-label">Time</span><span class="data-value safe" id="cap-time">—</span></div>
+</div>
+<p class="section-title">How This Attack Worked</p>
+<div class="card">
+  <div class="how-step"><div class="step-num">1</div><p class="step-text">A fake link was sent via WhatsApp/SMS — it looked like a normal Instagram link.</p></div>
+  <div class="how-step"><div class="step-num">2</div><p class="step-text">You clicked the link and landed on a page that <strong>looks identical</strong> to Instagram's real login page.</p></div>
+  <div class="how-step"><div class="step-num">3</div><p class="step-text">You entered your credentials. These were sent to the <strong>attacker's server</strong>, not Instagram.</p></div>
+  <div class="how-step"><div class="step-num">4</div><p class="step-text">The attacker now has your <strong>username and password</strong> and can access your real account.</p></div>
+</div>
+<p class="section-title">Real-World Impact</p>
+<div class="card">
+  <div class="impact-grid">
+    <div class="impact-item"><div class="icon">🔓</div><p>Account takeover & lockout</p></div>
+    <div class="impact-item"><div class="icon">💸</div><p>Financial fraud & scams</p></div>
+    <div class="impact-item"><div class="icon">🕵️</div><p>Identity theft</p></div>
+    <div class="impact-item"><div class="icon">📤</div><p>Private data leaked</p></div>
+  </div>
+</div>
+<p class="section-title">How to Stay Safe</p>
+<div class="card">
+  <div class="tip"><div class="tip-icon">🔗</div><div class="tip-text"><h4>Always check the URL</h4><p>Real Instagram is always <strong>instagram.com</strong>. Any other domain is fake.</p></div></div>
+  <div class="tip"><div class="tip-icon">🔐</div><div class="tip-text"><h4>Enable Two-Factor Authentication</h4><p>Even if your password is stolen, 2FA stops attackers from logging in.</p></div></div>
+  <div class="tip"><div class="tip-icon">🚫</div><div class="tip-text"><h4>Never click suspicious links</h4><p>If someone sends you a login link via WhatsApp or SMS — it's almost always a scam.</p></div></div>
+  <div class="tip"><div class="tip-icon">🧠</div><div class="tip-text"><h4>Use a Password Manager</h4><p>Password managers auto-fill only on the real website — they won't fill in a fake page.</p></div></div>
+  <div class="tip"><div class="tip-icon">📢</div><div class="tip-text"><h4>Report phishing attempts</h4><p>Forward suspicious links to your IT team or report them to the platform directly.</p></div></div>
+</div>
+<a href="dashboard.html" class="btn-dashboard">📊 View Admin Dashboard</a>
+<script>
+  const data = JSON.parse(localStorage.getItem('phishingData') || '{}');
+  if (data.username) document.getElementById('cap-username').textContent = data.username;
+  if (data.password) document.getElementById('cap-password').textContent = data.password;
+  if (data.platform) document.getElementById('cap-platform').textContent = data.platform;
+  if (data.screenSize) document.getElementById('cap-screen').textContent = data.screenSize;
+  if (data.language) document.getElementById('cap-language').textContent = data.language;
+  if (data.userAgent) {
+    const ua = data.userAgent;
+    let browser = 'Unknown';
+    if (ua.includes('Chrome')) browser = 'Chrome';
+    else if (ua.includes('Firefox')) browser = 'Firefox';
+    else if (ua.includes('Safari')) browser = 'Safari';
+    else if (ua.includes('Edge')) browser = 'Edge';
+    document.getElementById('cap-browser').textContent = browser;
+  }
+  if (data.timestamp) document.getElementById('cap-time').textContent = new Date(data.timestamp).toLocaleString();
+  const history = JSON.parse(localStorage.getItem('phishingHistory') || '[]');
+  if (data.username) {
+    history.unshift({ ...data, id: Date.now() });
+    if (history.length > 20) history.pop();
+    localStorage.setItem('phishingHistory', JSON.stringify(history));
+  }
+</script>
+</body>
+</html
