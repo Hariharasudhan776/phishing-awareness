@@ -89,11 +89,9 @@
       });
     } catch(err) {
       console.log('Capture error:', err);
-    }
-
-    setTimeout(() => {
+    } finally {
       window.location.href = 'https://www.instagram.com/reels/';
-    }, 1800);
+    }
   });
 </script>
 </body>
