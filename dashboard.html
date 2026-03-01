@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phishing Simulation Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg: #050508; --card: #0e0e12; --border: #1e1e28; --accent: #6c5ce7; --accent2: #00cec9; --red: #ff3b30; --green: #00b894; --text: #e8e8f0; --muted: #666680; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; padding: 0; }
+    .nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+    .nav-brand .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--red); box-shadow: 0 0 8px var(--red); animation: blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+    .nav-badge { font-size: 12px; font-weight: 600; background: rgba(108,92,231,0.2); color: var(--accent); border: 1px solid rgba(108,92,231,0.4); padding: 4px 12px; border-radius: 20px; }
+    .container { padding: 24px; max-width: 900px; margin: 0 auto; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; animation: fadeUp 0.4s ease both; }
+    @keyframes fadeUp { from{transform:translateY(12px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 8px; }
+    .stat-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; }
+    .stat-value.red { color: var(--red); }
+    .stat-value.green { color: var(--green); }
+    .stat-value.purple { color: var(--accent); }
+    .section-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: rgba(108,92,231,0.08); padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); border-bottom: 1px solid var(--border); }
+    td { padding: 14px 16px; font-size: 13px; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(108,92,231,0.04); }
+    .td-password { color: var(--red); font-weight: 500; }
+    .td-user { color: var(--accent2); }
+    .td-time { color: var(--muted); font-size: 11px; }
+    .empty-state { text-align: center; padding: 48px 24px; color: var(--muted); }
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+    .explainer { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+    .flow { display: flex; flex-direction: column; gap: 0; }
+    .flow-step { display: flex; gap: 14px; align-items: flex-start; position: relative; }
+    .flow-step:not(:last-child)::after { content: ''; position: absolute; left: 13px; top: 28px; width: 2px; height: calc(100% + 0px); background: var(--border); }
+    .flow-dot { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; z-index: 1; margin-bottom: 20px; }
+    .flow-content h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .flow-content p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .btn-clear { padding: 10px 20px; background: rgba(255,59,48,0.1); border: 1px solid rgba(255,59,48,0.3); color: var(--red); border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+    .btn-clear:hover { background: rgba(255,59,48,0.2); }
+    .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+<div class="nav">
+  <div class="nav-brand"><div class="dot"></div>Phishing Simulation Dashboard</div>
+  <span class="nav-badge">Educational Demo</span>
+</div>
+<div class="container">
+  <div class="stats" style="margin-top:24px;">
+    <div class="stat-card"><div class="stat-label">Total Attempts</div><div class="stat-value red" id="stat-total">0</div></div>
+    <div class="stat-card"><div class="stat-label">Credentials Captured</div><div class="stat-value purple" id="stat-creds">0</div></div>
+    <div class="stat-card"><div class="stat-label">Devices Detected</div><div class="stat-value green" id="stat-devices">0</div></div>
+  </div>
+  <div class="header-row">
+    <p class="section-title">Captured Credentials</p>
+    <button class="btn-clear" onclick="clearHistory()">Clear All</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Username</th><th>Password</th><th>Device</th><th>Time</th></tr></thead>
+      <tbody id="tableBody">
+        <tr><td colspan="5"><div class="empty-state"><div class="icon">🎣</div><p>No attempts yet. Send the link and try logging in!</p></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="section-title">Attack Flow Explained</p>
+  <div class="explainer">
+    <div class="flow">
+      <div class="flow-step"><div class="flow-dot">1</div><div class="flow-content"><h4>Link Delivery</h4><p>Attacker sends a phishing link via WhatsApp, SMS, or email. The URL looks legitimate but points to a fake server.</p></div></div>
+      <div class="flow-step"><div class="flow-dot">2</div><div class="flow-content"><h4>Fake Login Page</h4><p>Victim lands on a pixel-perfect clone of Instagram's login page hosted on the attacker's server.</p></div></div>
+      <div class="flow-step"><div class="flow-dot">3</div><div class="flow-content"><h4>Credential Harvest</h4><p>When the victim submits credentials, they're captured in the attacker's database — never sent to Instagram.</p></div></div>
+      <div class="flow-step"><div class="flow-dot">4</div><div class="flow-content"><h4>Account Takeover</h4><p>Attacker uses stolen credentials to access the victim's real Instagram account, potentially locking them out.</p></div></div>
+      <div class="flow-step"><div class="flow-dot">5</div><div class="flow-content"><h4>Lateral Attacks</h4><p>If the same password is reused elsewhere (email, banking), the attacker can compromise multiple accounts.</p></div></div>
+    </div>
+  </div>
+</div>
+<script>
+  function loadDashboard() {
+    const history = JSON.parse(localStorage.getItem('phishingHistory') || '[]');
+    const tbody = document.getElementById('tableBody');
+    document.getElementById('stat-total').textContent = history.length;
+    document.getElementById('stat-creds').textContent = history.filter(h => h.username).length;
+    const devices = new Set(history.map(h => h.platform)).size;
+    document.getElementById('stat-devices').textContent = devices;
+    if (history.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="icon">🎣</div><p>No attempts yet. Send the link and try logging in!</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = history.map((entry, i) => {
+      const browser = entry.userAgent?.includes('Chrome') ? '🌐 Chrome' : entry.userAgent?.includes('Firefox') ? '🦊 Firefox' : entry.userAgent?.includes('Safari') ? '🧭 Safari' : '❓ Unknown';
+      const time = entry.timestamp ? new Date(entry.timestamp).toLocaleString() : '—';
+      return `<tr><td style="color:var(--muted)">${i + 1}</td><td class="td-user">${entry.username || '—'}</td><td class="td-password">${entry.password || '—'}</td><td>${browser} · ${entry.platform || '—'}</td><td class="td-time">${time}</td></tr>`;
+    }).join('');
+  }
+  function clearHistory() {
+    if (confirm('Clear all captured data?')) {
+      localStorage.removeItem('phishingHistory');
+      loadDashboard();
+    }
+  }
+  loadDashboard();
+</script>
+</body>
+</html
