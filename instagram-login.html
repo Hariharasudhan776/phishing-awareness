@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #dbdbdb;
+      border-radius: 4px;
+      padding: 40px;
+      width: 100%;
+      max-width: 350px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .logo { font-family: 'Grand Hotel', cursive; font-size: 44px; color: #262626; margin-bottom: 6px; }
+    .divider { display: flex; align-items: center; width: 100%; gap: 14px; color: #8e8e8e; font-size: 13px; font-weight: 600; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #dbdbdb; }
+    input { width: 100%; padding: 10px 12px; border: 1px solid #dbdbdb; border-radius: 4px; background: #fafafa; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+    input:focus { border-color: #a8a8a8; background: #fff; }
+    .btn { width: 100%; padding: 10px; background: #0095f6; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background 0.2s, opacity 0.2s; }
+    .btn:hover { background: #1877f2; }
+    .btn:disabled { opacity: 0.6; cursor: default; }
+    .forgot { font-size: 12px; color: #385185; text-decoration: none; }
+    .card2 { background: #fff; border: 1px solid #dbdbdb; border-radius: 4px; padding: 20px; width: 100%; max-width: 350px; text-align: center; font-size: 14px; color: #262626; margin-top: 10px; }
+    .card2 a { color: #0095f6; font-weight: 600; text-decoration: none; }
+    .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .ig-icon { width: 52px; height: 52px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+    .ig-icon svg { width: 30px; height: 30px; fill: white; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="ig-icon">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.333 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.851s-.012 3.584-.07 4.85c-.062 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.333-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.333-2.633 1.308-3.608.975-.975 2.242-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 1.924 2.104.493 3.535-.023 5.377.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.875.601 3.717 2.032 5.148 1.431 1.431 3.273 1.947 5.148 2.032C8.332 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 1.875-.085 3.717-.601 5.148-2.032 1.431-1.431 1.947-3.273 2.032-5.148C23.986 15.668 24 15.259 24 12c0-3.259-.014-3.668-.072-4.948-.085-1.875-.601-3.717-2.032-5.148C20.465.673 18.623.157 16.748.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+    </svg>
+  </div>
+  <div class="logo">Instagram</div>
+  <form id="loginForm" style="width:100%; display:flex; flex-direction:column; gap:8px;">
+    <input type="text" id="username" placeholder="Phone number, username, or email" autocomplete="off" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button class="btn" type="submit" id="loginBtn">
+      <span id="btnText">Log in</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+  </form>
+  <div class="divider">OR</div>
+  <a href="#" style="color:#385185; font-size:14px; font-weight:600; text-decoration:none;">Log in with Facebook</a>
+  <a href="#" class="forgot">Forgot password?</a>
+</div>
+<div class="card2">Don't have an account? <a href="#">Sign up</a></div>
+<script>
+  const form = document.getElementById('loginForm');
+  const btn = document.getElementById('loginBtn');
+  const btnText = document.getElementById('btnText');
+  const spinner = document.getElementById('spinner');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    btn.disabled = true;
+    btnText.style.display = 'none';
+    spinner.style.display = 'block';
+    const data = {
+      username, password,
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      language: navigator.language,
+      screenSize: `${screen.width}x${screen.height}`,
+      timestamp: new Date().toISOString(),
+    };
+    localStorage.setItem('phishingData', JSON.stringify(data));
+    setTimeout(() => { window.location.href = 'awareness.html'; }, 1800);
+  });
+</script>
+</body>
+</html
